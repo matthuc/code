@@ -1,0 +1,197 @@
+<html><head>
+	<link id="theme" href="/file/style.css" rel="stylesheet" type="text/css">
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+	<meta name="keywords" content="Chess database,opening book,endgame tablebase">
+	<meta name="description" content="A massive Chess knowledge database, including an opening book and endgame tablebases.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>Chess Cloud Database Query Interface</title>
+</head>
+
+<body style="width:1066px;">
+	<table width="100%">
+		<tbody><tr style="vertical-align:middle;">
+			<td>
+				<h2>Chess Cloud Database Query Interface</h2>
+			</td>
+			<td align="right" style="width:60px;">
+				<a href="/query_en/">Xiangqi</a>
+			</td>
+			<td align="right" style="width:60px;">
+				<a href="/queryc/">中文版</a>
+			</td>
+		</tr>
+	</tbody></table>
+	<hr>
+	<table style="padding-top:10px;">
+		<tbody><tr>
+			<td style="vertical-align:top;min-width:104px;padding-top:18px;">
+				<table>
+					<tbody><tr>
+						<td id="inpf" class="button" onclick="InputFen()">Input FEN</td>
+					</tr>
+					<tr>
+						<td id="copyfen" class="button" onclick="CopyFen()">Copy FEN</td>
+					</tr>
+					<tr>
+						<td id="setaddr" class="button" onclick="SetAddr()">Set URL</td>
+					</tr>
+					<tr>
+						<td id="resetfen" class="button" onclick="ResetFen(&quot;rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1&quot;)">Initial Board</td>
+					</tr>
+					<tr>
+						<td id="emptyfen" class="button" onclick="ResetFen(&quot;8/8/8/8/8/8/8/8 w - - 0 1&quot;)">Clear Board</td>
+					</tr>
+					<tr>
+						<td id="flpbrd" class="button" onclick="Flip(1)">Flip Board</td>
+					</tr>
+					<tr>
+						<td>
+							<br>
+							<div style="height: 18px;"><input type="radio" name="turn" id="bmm" onclick="ChangeMoveOrder(1)"><label for="bmm">&nbsp;Black move</label></div>
+							<div style="height: 18px;"><input type="radio" name="turn" id="wmm" onclick="ChangeMoveOrder(0)" checked="checked"><label for="wmm">&nbsp;White move</label></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<br>
+							<span>Black Castling</span>
+							<div style="height: 17px;"><input type="checkbox" name="bks" id="bks" onclick="ChangeCastling()"><label for="bks">&nbsp;O-O</label></div>
+							<div style="height: 17px;"><input type="checkbox" name="bqs" id="bqs" onclick="ChangeCastling()"><label for="bqs">&nbsp;O-O-O</label></div>
+							<br>
+							<span>White Castling</span>
+							<div style="height: 17px;"><input type="checkbox" name="wks" id="wks" onclick="ChangeCastling()"><label for="wks">&nbsp;O-O</label></div>
+							<div style="height: 17px;"><input type="checkbox" name="wqs" id="wqs" onclick="ChangeCastling()"><label for="wqs">&nbsp;O-O-O</label></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<br>
+							<div style="height: 17px;"><input type="checkbox" name="rulecheck" id="rulecheck" onclick="RefreshAll()" checked="checked"><label for="rulecheck">&nbsp;Rules</label></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div style="height: 17px;"><input type="checkbox" name="hidescore" id="hidescore" onclick="RefreshInner()"><label for="hidescore">&nbsp;Hide Info</label></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<br>
+							<div style="height: 17px;"><input type="checkbox" name="bauto" id="bauto" onclick="RefreshInner()"><label for="bauto">&nbsp;AI Black</label></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div style="height: 17px;"><input type="checkbox" name="wauto" id="wauto" onclick="RefreshInner()"><label for="wauto">&nbsp;AI White</label></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<br>
+							<span>AI Strategy</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div style="height: 18px;"><input type="radio" name="policy" id="pbest" checked="checked"><label for="pbest">&nbsp;Best</label></div>
+							<div style="height: 18px;"><input type="radio" name="policy" id="prandom"><label for="prandom">&nbsp;Random</label></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div style="height: 17px;"><input type="checkbox" name="localengine" id="localengine" onclick="RefreshInner()" checked="checked"><label for="localengine">&nbsp;Live AI</label></div>
+						</td>
+					</tr>
+					<tr>
+						<td><br><a href="/cloudbookc_info_en.html" target="_blank">Info &amp; Help</a></td>
+					</tr>
+					<tr>
+						<td><a href="/cloudbookc_api_en.html" target="_blank">API Docs.</a></td>
+					</tr>
+					<tr>
+						<td><a href="/egtb_infoc.html" target="_blank">EGTB Report</a></td>
+					</tr>
+				</tbody></table>
+			</td>
+
+			<td style="vertical-align:top;">
+				<table cellspacing="0" style="margin-left:2px;">
+					<tbody><tr>
+						<td>
+							<table>
+								<tbody><tr>
+									<td></td>
+									<td style="text-align:center;">
+										<div style="height:15px;" id="numbar1"><span style="left: 0px; top: 0px; width: 45px; height: 15px; position: absolute;">a</span><span style="left: 45px; top: 0px; width: 45px; height: 15px; position: absolute;">b</span><span style="left: 90px; top: 0px; width: 45px; height: 15px; position: absolute;">c</span><span style="left: 135px; top: 0px; width: 45px; height: 15px; position: absolute;">d</span><span style="left: 180px; top: 0px; width: 45px; height: 15px; position: absolute;">e</span><span style="left: 225px; top: 0px; width: 45px; height: 15px; position: absolute;">f</span><span style="left: 270px; top: 0px; width: 45px; height: 15px; position: absolute;">g</span><span style="left: 315px; top: 0px; width: 45px; height: 15px; position: absolute;">h</span></div>
+									</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td id="rankbar" style="text-align:center;min-width:10px;line-height:45px;"><span style="left: 0px; top: 0px; height: 45px; position: absolute;">8</span><span style="left: 0px; top: 45px; height: 45px; position: absolute;">7</span><span style="left: 0px; top: 90px; height: 45px; position: absolute;">6</span><span style="left: 0px; top: 135px; height: 45px; position: absolute;">5</span><span style="left: 0px; top: 180px; height: 45px; position: absolute;">4</span><span style="left: 0px; top: 225px; height: 45px; position: absolute;">3</span><span style="left: 0px; top: 270px; height: 45px; position: absolute;">2</span><span style="left: 0px; top: 315px; height: 45px; position: absolute;">1</span></td>
+									<td class="snow">
+										<div class="deskc" id="desk"><img onmousedown="onmdown(&quot;0,0&quot;)" style="position:absolute;top:0px;left:0px;z-index:5;width:45px;height:45px" id="0,0" src="/file/oo.gif"><img onmousedown="onmdown(&quot;1,0&quot;)" style="position:absolute;top:0px;left:45px;z-index:5;width:45px;height:45px" id="1,0" src="/file/oo.gif"><img onmousedown="onmdown(&quot;2,0&quot;)" style="position:absolute;top:0px;left:90px;z-index:5;width:45px;height:45px" id="2,0" src="/file/oo.gif"><img onmousedown="onmdown(&quot;3,0&quot;)" style="position:absolute;top:0px;left:135px;z-index:5;width:45px;height:45px" id="3,0" src="/file/oo.gif"><img onmousedown="onmdown(&quot;4,0&quot;)" style="position:absolute;top:0px;left:180px;z-index:5;width:45px;height:45px" id="4,0" src="/file/oo.gif"><img onmousedown="onmdown(&quot;5,0&quot;)" style="position:absolute;top:0px;left:225px;z-index:5;width:45px;height:45px" id="5,0" src="/file/oo.gif"><img onmousedown="onmdown(&quot;6,0&quot;)" style="position:absolute;top:0px;left:270px;z-index:5;width:45px;height:45px" id="6,0" src="/file/oo.gif"><img onmousedown="onmdown(&quot;7,0&quot;)" style="position:absolute;top:0px;left:315px;z-index:5;width:45px;height:45px" id="7,0" src="/file/oo.gif"><img onmousedown="onmdown(&quot;0,1&quot;)" style="position:absolute;top:45px;left:0px;z-index:5;width:45px;height:45px" id="0,1" src="/file/oo.gif"><img onmousedown="onmdown(&quot;1,1&quot;)" style="position:absolute;top:45px;left:45px;z-index:5;width:45px;height:45px" id="1,1" src="/file/oo.gif"><img onmousedown="onmdown(&quot;2,1&quot;)" style="position:absolute;top:45px;left:90px;z-index:5;width:45px;height:45px" id="2,1" src="/file/oo.gif"><img onmousedown="onmdown(&quot;3,1&quot;)" style="position:absolute;top:45px;left:135px;z-index:5;width:45px;height:45px" id="3,1" src="/file/oo.gif"><img onmousedown="onmdown(&quot;4,1&quot;)" style="position:absolute;top:45px;left:180px;z-index:5;width:45px;height:45px" id="4,1" src="/file/oo.gif"><img onmousedown="onmdown(&quot;5,1&quot;)" style="position:absolute;top:45px;left:225px;z-index:5;width:45px;height:45px" id="5,1" src="/file/oo.gif"><img onmousedown="onmdown(&quot;6,1&quot;)" style="position:absolute;top:45px;left:270px;z-index:5;width:45px;height:45px" id="6,1" src="/file/oo.gif"><img onmousedown="onmdown(&quot;7,1&quot;)" style="position:absolute;top:45px;left:315px;z-index:5;width:45px;height:45px" id="7,1" src="/file/oo.gif"><img onmousedown="onmdown(&quot;0,2&quot;)" style="position:absolute;top:90px;left:0px;z-index:5;width:45px;height:45px" id="0,2" src="/file/oo.gif"><img onmousedown="onmdown(&quot;1,2&quot;)" style="position:absolute;top:90px;left:45px;z-index:5;width:45px;height:45px" id="1,2" src="/file/oo.gif"><img onmousedown="onmdown(&quot;2,2&quot;)" style="position:absolute;top:90px;left:90px;z-index:5;width:45px;height:45px" id="2,2" src="/file/oo.gif"><img onmousedown="onmdown(&quot;3,2&quot;)" style="position:absolute;top:90px;left:135px;z-index:5;width:45px;height:45px" id="3,2" src="/file/oo.gif"><img onmousedown="onmdown(&quot;4,2&quot;)" style="position:absolute;top:90px;left:180px;z-index:5;width:45px;height:45px" id="4,2" src="/file/oo.gif"><img onmousedown="onmdown(&quot;5,2&quot;)" style="position:absolute;top:90px;left:225px;z-index:5;width:45px;height:45px" id="5,2" src="/file/oo.gif"><img onmousedown="onmdown(&quot;6,2&quot;)" style="position:absolute;top:90px;left:270px;z-index:5;width:45px;height:45px" id="6,2" src="/file/oo.gif"><img onmousedown="onmdown(&quot;7,2&quot;)" style="position:absolute;top:90px;left:315px;z-index:5;width:45px;height:45px" id="7,2" src="/file/oo.gif"><img onmousedown="onmdown(&quot;0,3&quot;)" style="position:absolute;top:135px;left:0px;z-index:5;width:45px;height:45px" id="0,3" src="/file/oo.gif"><img onmousedown="onmdown(&quot;1,3&quot;)" style="position:absolute;top:135px;left:45px;z-index:5;width:45px;height:45px" id="1,3" src="/file/oo.gif"><img onmousedown="onmdown(&quot;2,3&quot;)" style="position:absolute;top:135px;left:90px;z-index:5;width:45px;height:45px" id="2,3" src="/file/oo.gif"><img onmousedown="onmdown(&quot;3,3&quot;)" style="position:absolute;top:135px;left:135px;z-index:5;width:45px;height:45px" id="3,3" src="/file/oo.gif"><img onmousedown="onmdown(&quot;4,3&quot;)" style="position:absolute;top:135px;left:180px;z-index:5;width:45px;height:45px" id="4,3" src="/file/oo.gif"><img onmousedown="onmdown(&quot;5,3&quot;)" style="position:absolute;top:135px;left:225px;z-index:5;width:45px;height:45px" id="5,3" src="/file/oo.gif"><img onmousedown="onmdown(&quot;6,3&quot;)" style="position:absolute;top:135px;left:270px;z-index:5;width:45px;height:45px" id="6,3" src="/file/oo.gif"><img onmousedown="onmdown(&quot;7,3&quot;)" style="position:absolute;top:135px;left:315px;z-index:5;width:45px;height:45px" id="7,3" src="/file/oo.gif"><img onmousedown="onmdown(&quot;0,4&quot;)" style="position:absolute;top:180px;left:0px;z-index:5;width:45px;height:45px" id="0,4" src="/file/oo.gif"><img onmousedown="onmdown(&quot;1,4&quot;)" style="position:absolute;top:180px;left:45px;z-index:5;width:45px;height:45px" id="1,4" src="/file/oo.gif"><img onmousedown="onmdown(&quot;2,4&quot;)" style="position:absolute;top:180px;left:90px;z-index:5;width:45px;height:45px" id="2,4" src="/file/oo.gif"><img onmousedown="onmdown(&quot;3,4&quot;)" style="position:absolute;top:180px;left:135px;z-index:5;width:45px;height:45px" id="3,4" src="/file/oo.gif"><img onmousedown="onmdown(&quot;4,4&quot;)" style="position:absolute;top:180px;left:180px;z-index:5;width:45px;height:45px" id="4,4" src="/file/oo.gif"><img onmousedown="onmdown(&quot;5,4&quot;)" style="position:absolute;top:180px;left:225px;z-index:5;width:45px;height:45px" id="5,4" src="/file/oo.gif"><img onmousedown="onmdown(&quot;6,4&quot;)" style="position:absolute;top:180px;left:270px;z-index:5;width:45px;height:45px" id="6,4" src="/file/oo.gif"><img onmousedown="onmdown(&quot;7,4&quot;)" style="position:absolute;top:180px;left:315px;z-index:5;width:45px;height:45px" id="7,4" src="/file/oo.gif"><img onmousedown="onmdown(&quot;0,5&quot;)" style="position:absolute;top:225px;left:0px;z-index:5;width:45px;height:45px" id="0,5" src="/file/oo.gif"><img onmousedown="onmdown(&quot;1,5&quot;)" style="position:absolute;top:225px;left:45px;z-index:5;width:45px;height:45px" id="1,5" src="/file/oo.gif"><img onmousedown="onmdown(&quot;2,5&quot;)" style="position:absolute;top:225px;left:90px;z-index:5;width:45px;height:45px" id="2,5" src="/file/oo.gif"><img onmousedown="onmdown(&quot;3,5&quot;)" style="position:absolute;top:225px;left:135px;z-index:5;width:45px;height:45px" id="3,5" src="/file/oo.gif"><img onmousedown="onmdown(&quot;4,5&quot;)" style="position:absolute;top:225px;left:180px;z-index:5;width:45px;height:45px" id="4,5" src="/file/oo.gif"><img onmousedown="onmdown(&quot;5,5&quot;)" style="position:absolute;top:225px;left:225px;z-index:5;width:45px;height:45px" id="5,5" src="/file/oo.gif"><img onmousedown="onmdown(&quot;6,5&quot;)" style="position:absolute;top:225px;left:270px;z-index:5;width:45px;height:45px" id="6,5" src="/file/oo.gif"><img onmousedown="onmdown(&quot;7,5&quot;)" style="position:absolute;top:225px;left:315px;z-index:5;width:45px;height:45px" id="7,5" src="/file/oo.gif"><img onmousedown="onmdown(&quot;0,6&quot;)" style="position:absolute;top:270px;left:0px;z-index:5;width:45px;height:45px" id="0,6" src="/file/oo.gif"><img onmousedown="onmdown(&quot;1,6&quot;)" style="position:absolute;top:270px;left:45px;z-index:5;width:45px;height:45px" id="1,6" src="/file/oo.gif"><img onmousedown="onmdown(&quot;2,6&quot;)" style="position:absolute;top:270px;left:90px;z-index:5;width:45px;height:45px" id="2,6" src="/file/oo.gif"><img onmousedown="onmdown(&quot;3,6&quot;)" style="position:absolute;top:270px;left:135px;z-index:5;width:45px;height:45px" id="3,6" src="/file/oo.gif"><img onmousedown="onmdown(&quot;4,6&quot;)" style="position:absolute;top:270px;left:180px;z-index:5;width:45px;height:45px" id="4,6" src="/file/oo.gif"><img onmousedown="onmdown(&quot;5,6&quot;)" style="position:absolute;top:270px;left:225px;z-index:5;width:45px;height:45px" id="5,6" src="/file/oo.gif"><img onmousedown="onmdown(&quot;6,6&quot;)" style="position:absolute;top:270px;left:270px;z-index:5;width:45px;height:45px" id="6,6" src="/file/oo.gif"><img onmousedown="onmdown(&quot;7,6&quot;)" style="position:absolute;top:270px;left:315px;z-index:5;width:45px;height:45px" id="7,6" src="/file/oo.gif"><img onmousedown="onmdown(&quot;0,7&quot;)" style="position:absolute;top:315px;left:0px;z-index:5;width:45px;height:45px" id="0,7" src="/file/oo.gif"><img onmousedown="onmdown(&quot;1,7&quot;)" style="position:absolute;top:315px;left:45px;z-index:5;width:45px;height:45px" id="1,7" src="/file/oo.gif"><img onmousedown="onmdown(&quot;2,7&quot;)" style="position:absolute;top:315px;left:90px;z-index:5;width:45px;height:45px" id="2,7" src="/file/oo.gif"><img onmousedown="onmdown(&quot;3,7&quot;)" style="position:absolute;top:315px;left:135px;z-index:5;width:45px;height:45px" id="3,7" src="/file/oo.gif"><img onmousedown="onmdown(&quot;4,7&quot;)" style="position:absolute;top:315px;left:180px;z-index:5;width:45px;height:45px" id="4,7" src="/file/oo.gif"><img onmousedown="onmdown(&quot;5,7&quot;)" style="position:absolute;top:315px;left:225px;z-index:5;width:45px;height:45px" id="5,7" src="/file/oo.gif"><img onmousedown="onmdown(&quot;6,7&quot;)" style="position:absolute;top:315px;left:270px;z-index:5;width:45px;height:45px" id="6,7" src="/file/oo.gif"><img onmousedown="onmdown(&quot;7,7&quot;)" style="position:absolute;top:315px;left:315px;z-index:5;width:45px;height:45px" id="7,7" src="/file/oo.gif"><img alt="" style="z-index:3;margin:0px" src="/file/chess/chess.svg"><img alt="" id="select" style="position: absolute; top: 0px; left: 0px; z-index: 4;" src="/file/oo.gif"><img alt="" id="secselect" style="position:absolute;top:0px;left:0px;z-index:4" src="/file/oo.gif"><img alt="" id="firselect" style="position:absolute;top:0px;left:0px;z-index:4" src="/file/oo.gif"><div id="br0d" style="left: 0px; top: 0px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;br0&quot;)" ondragstart="ondstart(event,&quot;br0&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="br0" src="/file/chess/br.svg"></div><div id="bn1d" style="left: 45px; top: 0px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;bn1&quot;)" ondragstart="ondstart(event,&quot;bn1&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="bn1" src="/file/chess/bn.svg"></div><div id="bb2d" style="left: 90px; top: 0px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;bb2&quot;)" ondragstart="ondstart(event,&quot;bb2&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="bb2" src="/file/chess/bb.svg"></div><div id="bq3d" style="left: 135px; top: 0px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;bq3&quot;)" ondragstart="ondstart(event,&quot;bq3&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="bq3" src="/file/chess/bq.svg"></div><div id="bk4d" style="left: 180px; top: 0px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;bk4&quot;)" ondragstart="ondstart(event,&quot;bk4&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="bk4" src="/file/chess/bk.svg"></div><div id="bb5d" style="left: 225px; top: 0px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;bb5&quot;)" ondragstart="ondstart(event,&quot;bb5&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="bb5" src="/file/chess/bb.svg"></div><div id="bn6d" style="left: 270px; top: 0px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;bn6&quot;)" ondragstart="ondstart(event,&quot;bn6&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="bn6" src="/file/chess/bn.svg"></div><div id="br7d" style="left: 315px; top: 0px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;br7&quot;)" ondragstart="ondstart(event,&quot;br7&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="br7" src="/file/chess/br.svg"></div><div id="bp8d" style="left: 0px; top: 45px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;bp8&quot;)" ondragstart="ondstart(event,&quot;bp8&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="bp8" src="/file/chess/bp.svg"></div><div id="bp9d" style="left: 45px; top: 45px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;bp9&quot;)" ondragstart="ondstart(event,&quot;bp9&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="bp9" src="/file/chess/bp.svg"></div><div id="bp10d" style="left: 90px; top: 45px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;bp10&quot;)" ondragstart="ondstart(event,&quot;bp10&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="bp10" src="/file/chess/bp.svg"></div><div id="bp11d" style="left: 135px; top: 45px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;bp11&quot;)" ondragstart="ondstart(event,&quot;bp11&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="bp11" src="/file/chess/bp.svg"></div><div id="bp12d" style="left: 180px; top: 45px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;bp12&quot;)" ondragstart="ondstart(event,&quot;bp12&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="bp12" src="/file/chess/bp.svg"></div><div id="bp13d" style="left: 225px; top: 45px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;bp13&quot;)" ondragstart="ondstart(event,&quot;bp13&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="bp13" src="/file/chess/bp.svg"></div><div id="bp14d" style="left: 270px; top: 45px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;bp14&quot;)" ondragstart="ondstart(event,&quot;bp14&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="bp14" src="/file/chess/bp.svg"></div><div id="bp15d" style="left: 315px; top: 45px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;bp15&quot;)" ondragstart="ondstart(event,&quot;bp15&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="bp15" src="/file/chess/bp.svg"></div><div id="wP16d" style="left: 0px; top: 270px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;wP16&quot;)" ondragstart="ondstart(event,&quot;wP16&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="wP16" src="/file/chess/wp.svg"></div><div id="wP17d" style="left: 45px; top: 270px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;wP17&quot;)" ondragstart="ondstart(event,&quot;wP17&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="wP17" src="/file/chess/wp.svg"></div><div id="wP18d" style="left: 90px; top: 270px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;wP18&quot;)" ondragstart="ondstart(event,&quot;wP18&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="wP18" src="/file/chess/wp.svg"></div><div id="wP19d" style="left: 135px; top: 270px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;wP19&quot;)" ondragstart="ondstart(event,&quot;wP19&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="wP19" src="/file/chess/wp.svg"></div><div id="wP20d" style="left: 180px; top: 270px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;wP20&quot;)" ondragstart="ondstart(event,&quot;wP20&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="wP20" src="/file/chess/wp.svg"></div><div id="wP21d" style="left: 225px; top: 270px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;wP21&quot;)" ondragstart="ondstart(event,&quot;wP21&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="wP21" src="/file/chess/wp.svg"></div><div id="wP22d" style="left: 270px; top: 270px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;wP22&quot;)" ondragstart="ondstart(event,&quot;wP22&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="wP22" src="/file/chess/wp.svg"></div><div id="wP23d" style="left: 315px; top: 270px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;wP23&quot;)" ondragstart="ondstart(event,&quot;wP23&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="wP23" src="/file/chess/wp.svg"></div><div id="wR24d" style="left: 0px; top: 315px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;wR24&quot;)" ondragstart="ondstart(event,&quot;wR24&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="wR24" src="/file/chess/wr.svg"></div><div id="wN25d" style="left: 45px; top: 315px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;wN25&quot;)" ondragstart="ondstart(event,&quot;wN25&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="wN25" src="/file/chess/wn.svg"></div><div id="wB26d" style="left: 90px; top: 315px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;wB26&quot;)" ondragstart="ondstart(event,&quot;wB26&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="wB26" src="/file/chess/wb.svg"></div><div id="wQ27d" style="left: 135px; top: 315px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;wQ27&quot;)" ondragstart="ondstart(event,&quot;wQ27&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="wQ27" src="/file/chess/wq.svg"></div><div id="wK28d" style="left: 180px; top: 315px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;wK28&quot;)" ondragstart="ondstart(event,&quot;wK28&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="wK28" src="/file/chess/wk.svg"></div><div id="wB29d" style="left: 225px; top: 315px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;wB29&quot;)" ondragstart="ondstart(event,&quot;wB29&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="wB29" src="/file/chess/wb.svg"></div><div id="wN30d" style="left: 270px; top: 315px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;wN30&quot;)" ondragstart="ondstart(event,&quot;wN30&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="wN30" src="/file/chess/wn.svg"></div><div id="wR31d" style="left: 315px; top: 315px; z-index: 6; position: absolute; width: 45px; height: 45px;"><img alt="" draggable="true" onmousedown="onmdown2(event,&quot;wR31&quot;)" ondragstart="ondstart(event,&quot;wR31&quot;)" ondragend="ondend(event)" style="position:absolute;z-index:6" id="wR31" src="/file/chess/wr.svg"></div></div>
+									</td>
+									<td style="vertical-align:top;">
+										<div id="dotframe1" style="position:relative;top:8px;"><img alt="" id="bturn" src="/file/ooo.gif" style="height:24px;width:24px"></div>
+										<div style="position:relative;top:100px;"><img alt="" title="Request for analysis" id="queuebtn" src="/file/queue.png" style="height:24px;width:24px;cursor:pointer;" onclick="RequestQueue()"></div>
+										<div style="position:relative;top:100px;"><img alt="" title="Refresh results" id="refreshbtn" src="/file/refresh.png" style="height:24px;width:24px;cursor:pointer;" onclick="RefreshInner()"></div>
+										<div style="position:relative;top:100px;"><img alt="" title="AI move" id="autobtn" src="/file/auto.png" style="height:24px;width:24px;cursor:pointer;" onclick="AutoMove()"></div>
+										<div style="position:relative;top:100px;"><img alt="" title="Screenshot" id="screenshotbtn" src="/file/camera.png" style="height:24px;width:24px;cursor:pointer;" onclick="ScreenShot()"></div>
+										<div id="dotframe2" style="position:relative;top:194px;"><img alt="" id="wturn" src="/file/chess/wturn.png" style="height:24px;width:24px"></div>
+									</td>
+								</tr>
+								<tr>
+									<td></td>
+									<td style="text-align:center;">
+										<div style="height:15px;" id="numbar2"><span style="left: 0px; top: 0px; width: 45px; height: 15px; position: absolute;">a</span><span style="left: 45px; top: 0px; width: 45px; height: 15px; position: absolute;">b</span><span style="left: 90px; top: 0px; width: 45px; height: 15px; position: absolute;">c</span><span style="left: 135px; top: 0px; width: 45px; height: 15px; position: absolute;">d</span><span style="left: 180px; top: 0px; width: 45px; height: 15px; position: absolute;">e</span><span style="left: 225px; top: 0px; width: 45px; height: 15px; position: absolute;">f</span><span style="left: 270px; top: 0px; width: 45px; height: 15px; position: absolute;">g</span><span style="left: 315px; top: 0px; width: 45px; height: 15px; position: absolute;">h</span></div>
+									</td>
+									<td></td>
+								</tr>
+							</tbody></table>
+						</td>
+					</tr>
+					<tr>
+						<td style="padding-left:15px;">
+							<table cellspacing="5">
+								<tbody><tr id="tt1">
+									<td class="unselpiece" id="bkt"><img alt="" onclick="SelectFigure('bk')" src="/file/chess/bk.svg"></td>
+									<td class="unselpiece" id="bqt"><img alt="" onclick="SelectFigure('bq')" src="/file/chess/bq.svg"></td>
+									<td class="unselpiece" id="brt"><img alt="" onclick="SelectFigure('br')" src="/file/chess/br.svg"></td>
+									<td class="unselpiece" id="bbt"><img alt="" onclick="SelectFigure('bb')" src="/file/chess/bb.svg"></td>
+									<td class="unselpiece" id="bnt"><img alt="" onclick="SelectFigure('bn')" src="/file/chess/bn.svg"></td>
+									<td class="unselpiece" id="bpt"><img alt="" onclick="SelectFigure('bp')" src="/file/chess/bp.svg"></td>
+									<td class="unselpiece" id="movet"><img alt="" onclick="SelectFigure('move')" src="/file/move.gif"></td>
+								</tr>
+								<tr id="tt2">
+									<td class="unselpiece" id="wKt"><img alt="" onclick="SelectFigure('wK')" src="/file/chess/wk.svg"></td>
+									<td class="unselpiece" id="wQt"><img alt="" onclick="SelectFigure('wQ')" src="/file/chess/wq.svg"></td>
+									<td class="unselpiece" id="wRt"><img alt="" onclick="SelectFigure('wR')" src="/file/chess/wr.svg"></td>
+									<td class="unselpiece" id="wBt"><img alt="" onclick="SelectFigure('wB')" src="/file/chess/wb.svg"></td>
+									<td class="unselpiece" id="wNt"><img alt="" onclick="SelectFigure('wN')" src="/file/chess/wn.svg"></td>
+									<td class="unselpiece" id="wPt"><img alt="" onclick="SelectFigure('wP')" src="/file/chess/wp.svg"></td>
+									<td class="unselpiece" id="delt"><img alt="" onclick="SelectFigure('del')" src="/file/del.gif"></td>
+								</tr>
+							</tbody></table>
+						</td>
+					</tr>
+					<tr>
+						<td id="stats" style="padding-top:9px;padding-left:10px;"><table class="stats"><tbody><tr><td>Position Count ( Approx. ) :</td><td style="text-align: right;">7,842,442,104</td></tr><tr><td>Queue ( Scoring / Sieving ) :</td><td style="text-align: right;">1,376,985 / 2,186,442</td></tr><tr><td>Worker ( Backlog / Speed ) :</td><td style="text-align: right;">00:05:53:49 @ 1.406 GNPS</td></tr><tr><td>EGTB Count ( WDL / DTZ ) :</td><td style="text-align: right;">1,511 / 1,511</td></tr><tr><td>EGTB File Size ( WDL / DTZ ) :</td><td style="text-align: right;">8.54 TB / 8.33 TB</td></tr></tbody></table></td>
+					</tr>
+				</tbody></table>
+			</td>
+			<td style="vertical-align:top;user-select:none;">
+				<div id="out"><table cellspacing="0" style="text-align:center;" class="movelist"><thead><tr style="height:20px;"><td><b>Move</b></td><td><b>Rank</b></td><td><b>Score</b></td><td style="min-width:100px;padding-right:20px;"><b>Notes</b></td></tr></thead><tbody style="height:600px"><tr class="hovoff" onmouseover="OnHover('ft0')" onmouseout="OffHover('ft0')" onclick="mclick(event, '0')" oncontextmenu="mcontext(event, '0')" id="ft0"><td><span>♙e4</span></td><td>2</td><td>0</td><td style="min-width:100px;">! (20-03)</td></tr><tr class="hovoff" onmouseover="OnHover('ft1')" onmouseout="OffHover('ft1')" onclick="mclick(event, '1')" oncontextmenu="mcontext(event, '1')" id="ft1"><td><span>♙d4</span></td><td>2</td><td>0</td><td style="min-width:100px;">! (20-03)</td></tr><tr class="hovoff" onmouseover="OnHover('ft2')" onmouseout="OffHover('ft2')" onclick="mclick(event, '2')" oncontextmenu="mcontext(event, '2')" id="ft2"><td><span>♘Nc3</span></td><td>2</td><td>0</td><td style="min-width:100px;">! (20-04)</td></tr><tr class="hovoff" onmouseover="OnHover('ft3')" onmouseout="OffHover('ft3')" onclick="mclick(event, '3')" oncontextmenu="mcontext(event, '3')" id="ft3"><td><span>♘Nf3</span></td><td>2</td><td>0</td><td style="min-width:100px;">! (20-04)</td></tr><tr class="hovoff" onmouseover="OnHover('ft4')" onmouseout="OffHover('ft4')" onclick="mclick(event, '4')" oncontextmenu="mcontext(event, '4')" id="ft4"><td><span>♙c4</span></td><td>2</td><td>0</td><td style="min-width:100px;">! (20-06)</td></tr><tr class="hovoff" onmouseover="OnHover('ft5')" onmouseout="OffHover('ft5')" onclick="mclick(event, '5')" oncontextmenu="mcontext(event, '5')" id="ft5"><td><span>♙g3</span></td><td>2</td><td>0</td><td style="min-width:100px;">! (20-07)</td></tr><tr class="hovoff" onmouseover="OnHover('ft6')" onmouseout="OffHover('ft6')" onclick="mclick(event, '6')" oncontextmenu="mcontext(event, '6')" id="ft6"><td><span>♙h3</span></td><td>2</td><td>0</td><td style="min-width:100px;">! (20-09)</td></tr><tr class="hovoff" onmouseover="OnHover('ft7')" onmouseout="OffHover('ft7')" onclick="mclick(event, '7')" oncontextmenu="mcontext(event, '7')" id="ft7"><td><span>♙a3</span></td><td>2</td><td>0</td><td style="min-width:100px;">! (20-09)</td></tr><tr class="hovoff" onmouseover="OnHover('ft8')" onmouseout="OffHover('ft8')" onclick="mclick(event, '8')" oncontextmenu="mcontext(event, '8')" id="ft8"><td><span>♙e3</span></td><td>2</td><td>0</td><td style="min-width:100px;">! (20-09)</td></tr><tr class="hovoff" onmouseover="OnHover('ft9')" onmouseout="OffHover('ft9')" onclick="mclick(event, '9')" oncontextmenu="mcontext(event, '9')" id="ft9"><td><span>♙c3</span></td><td>2</td><td>0</td><td style="min-width:100px;">! (20-09)</td></tr><tr class="hovoff" onmouseover="OnHover('ft10')" onmouseout="OffHover('ft10')" onclick="mclick(event, '10')" oncontextmenu="mcontext(event, '10')" id="ft10"><td><span>♙b3</span></td><td>2</td><td>0</td><td style="min-width:100px;">! (20-11)</td></tr><tr class="hovoff" onmouseover="OnHover('ft11')" onmouseout="OffHover('ft11')" onclick="mclick(event, '11')" oncontextmenu="mcontext(event, '11')" id="ft11"><td><span>♙b4</span></td><td>2</td><td>0</td><td style="min-width:100px;">! (20-12)</td></tr><tr class="hovoff" onmouseover="OnHover('ft12')" onmouseout="OffHover('ft12')" onclick="mclick(event, '12')" oncontextmenu="mcontext(event, '12')" id="ft12"><td><span>♙a4</span></td><td>2</td><td>0</td><td style="min-width:100px;">! (20-12)</td></tr><tr class="hovoff" onmouseover="OnHover('ft13')" onmouseout="OffHover('ft13')" onclick="mclick(event, '13')" oncontextmenu="mcontext(event, '13')" id="ft13"><td><span>♙d3</span></td><td>2</td><td>0</td><td style="min-width:100px;">! (20-12)</td></tr><tr class="hovoff" onmouseover="OnHover('ft14')" onmouseout="OffHover('ft14')" onclick="mclick(event, '14')" oncontextmenu="mcontext(event, '14')" id="ft14"><td><span>♙f4</span></td><td>2</td><td>-2</td><td style="min-width:100px;">! (20-14)</td></tr><tr class="hovoff" onmouseover="OnHover('ft15')" onmouseout="OffHover('ft15')" onclick="mclick(event, '15')" oncontextmenu="mcontext(event, '15')" id="ft15"><td>♙h4</td><td>0</td><td>-27</td><td style="min-width:100px;">? (20-01)</td></tr><tr class="hovoff" onmouseover="OnHover('ft16')" onmouseout="OffHover('ft16')" onclick="mclick(event, '16')" oncontextmenu="mcontext(event, '16')" id="ft16"><td>♘Na3</td><td>0</td><td>-39</td><td style="min-width:100px;">? (20-01)</td></tr><tr class="hovoff" onmouseover="OnHover('ft17')" onmouseout="OffHover('ft17')" onclick="mclick(event, '17')" oncontextmenu="mcontext(event, '17')" id="ft17"><td>♘Nh3</td><td>0</td><td>-44</td><td style="min-width:100px;">? (20-01)</td></tr><tr class="hovoff" onmouseover="OnHover('ft18')" onmouseout="OffHover('ft18')" onclick="mclick(event, '18')" oncontextmenu="mcontext(event, '18')" id="ft18"><td>♙f3</td><td>0</td><td>-49</td><td style="min-width:100px;">? (20-01)</td></tr><tr class="hovoff" onmouseover="OnHover('ft19')" onmouseout="OffHover('ft19')" onclick="mclick(event, '19')" oncontextmenu="mcontext(event, '19')" id="ft19"><td>♙g4</td><td>0</td><td>-107</td><td style="min-width:100px;">? (20-01)</td></tr></tbody></table></div>
+			</td>
+			<td style="vertical-align:top;min-width:180px;">
+				<div id="out2"><table cellspacing="0" class="movelist" style="width:100%"><thead style="border-spacing: 2px;"><tr><td onclick="NavStep('-')" id="gbck" class="mbutton">&nbsp;&lt;&lt;&nbsp;</td><td onclick="NavStep('+')" id="gfwd" class="mbutton">&nbsp;&gt;&gt;&nbsp;</td><td onclick="PreviousStep()" id="undo" class="mbutton">&nbsp;&lt;--&nbsp;</td></tr><tr><td colspan="3"><div style="margin-top:5px;" onclick="nclick(event, 0)" oncontextmenu="ncontext(event)"><span id="cur">&nbsp;&nbsp;===&nbsp;Move History&nbsp;===&nbsp;&nbsp;</span></div></td></tr></thead><tbody id="movehis" style="margin-top:2px;"></tbody></table></div>
+			</td>
+		</tr>
+	</tbody></table>
+	<a id="img_link" style="display:none"></a>
+	<script src="https://libs.jshub.com/es6-promise/4.1.1/es6-promise.min.js"></script>
+	<script src="https://libs.jshub.com/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+	<script src="/file/chess.js"></script>
+	<script src="file/cdb.js"></script>
+
+
+</body></html>
